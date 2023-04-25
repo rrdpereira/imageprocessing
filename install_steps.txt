@@ -1,0 +1,126 @@
+git clone https://github.com/micasense/imageprocessing
+cd imageprocessing
+conda env create -f micasense_conda_env.yml # or pip install .
+conda activate micasense
+jupyter notebook .
+
+16 – Install VirtualENV and Miniconda
+sudo pip3 install virtualenv
+
+python3 -m virtualenv -p python3.8 Yo38JetV --system-site-packages
+
+echo "source ~/Yo38JetV/bin/activate" >> ~/.bashrc
+
+source ~/.bashrc
+
+deactivate
+
+rm -r Yo38JetV
+or
+rm -rf Yo38JetV
+___________
+https://docs.conda.io/en/latest/miniconda.html#linux-installers
+https://conda.io/projects/conda/en/stable/user-guide/install/linux.html
+
+bash Miniconda3-latest-Linux-x86_64.sh
+
+/home/$USER/Documents/miniconda3
+
+https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+#Use the requirements.txt file to create an environment out of the box. For that, you can use the –file flag when creating an environment with conda as:
+
+conda create --name env38e python=3.8.10 --file requirements2.txt
+
+Conda will take the file and create an environment with the packages specified.
+
+conda create -n env38e python=3.8
+
+conda activate env38e
+
+(base)
+echo "source ~/Documents/miniconda3/bin/activate" >> ~/.bashrc
+
+(nok)
+echo "source ~/Documents/miniconda3/envs/env38e/lib/python3.8/venv/scripts/common/activate" >> ~/.bashrc
+
+(NavYo38)
+echo "source ~/Documents/miniconda3/bin/activate env38e" >> ~/.bashrc
+
+source ~/.bashrc
+
+conda deactivate
+
+conda env list
+
+conda info --envs
+
+conda remove --name env38e --all
+
+https://linuxhint.com/conda-install-requirements-txt/
+
+conda install --file requirements.txt
+
+https://stackoverflow.com/questions/54843067/no-module-named-torch
+
+#Install pytorch inside the environment:
+conda install pytorch torchvision -c pytorch
+
+conda install pytorch torch torchvision torchaudio -c pytorch
+
+pip3 install torch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+
+conda install -c conda-forge opencv
+OR
+#Install opencv with pip NOT conda
+
+pip3 install opencv-python
+
+#If your still having an issue, uninstall opencv, update ffmpeg
+
+conda install -c conda-forge ffmpeg
+
+pip3 install thop
+
+/home/vega/Documents/miniconda3/envs/env38e/lib/python3.8/site-packages
+
+17 – Install ZLAC8015d Driver
+
+#Extract the ZLAC8015d @ “/home/saitama/stm_wksp/src/mobile_rob_dev/include/ZLAC8015D_python.zip” to “~/Documents”, and install:
+
+sudo pip3 install pymodbus==3.0.2
+
+sudo pip3 install pyserial==3.5
+
+#@ “/home/saitama/Documents/ZLAC8015D_python” folder:
+sudo python3 setup.py install
+
+https://stackoverflow.com/questions/72648909/condamini-hangs-collecting-package-metadata-when-creating-2-environments-on-th
+
+conda clean --all
+
+conda create -n top -c conda-forge -c defaults python=3 geopanda
+
+conda env create -f micasense_conda_env.yml # or pip install .
+
+
+****************************************************************************************
+https://askubuntu.com/questions/859630/how-to-start-ubuntu-in-console-mode
+
+Yes you can. As described here (ubuntuhandbook.org - Boot into text console ubuntu) you need to edit /etc/default/grub to have the next boot end up in text mode. In summary you will set these parameters:
+
+GRUB_CMDLINE_LINUX_DEFAULT="text"
+GRUB_TERMINAL=console
+
+After saving changes you need to run:
+
+sudo update-grub
+sudo systemctl enable multi-user.target --force
+sudo systemctl set-default multi-user.target
+
+Undoing text-mode
+
+To undo sudo systemctl set-default multi-user.target simply type 
+
+sudo systemctl enable graphical.target --force
+sudo systemctl set-default graphical.target
