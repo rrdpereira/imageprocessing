@@ -15,4 +15,4 @@ def update_f(val):
 #Linux filepath
 #imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
 #Windows filepath
-imagePath = os.path.join('r:\\','RedEdgeImageSet','0000SET')
+imagePath = os.path.join('r:\\','proc_field','RedEdgeImageSet','0000SET')

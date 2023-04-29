@@ -25,14 +25,16 @@ import subprocess
 # ReflectanceImagesFolder = os.path.join('.','data','RedEdge3','OUT')
 #ReflectanceImagesFolder = (r'C:\Users\emre\Desktop\aaa\REF')         # The location of the files to be recorded will be determined
 #Windows filepath
-ReflectanceImagesFolder = os.path.join('c:\\','Users','robso','Downloads','RedEdge3','OUT')
+#ReflectanceImagesFolder = os.path.join('c:\\','Users','robso','Downloads','RedEdge3','OUT')
+ReflectanceImagesFolder = os.path.join('r:\\','proc_field','RedEdge3','OUT')
 
 #RRDP
 #Linux filepath
 #images_path = os.path.join('.','data','RedEdge3') 
 #images_path = os.path.join(r'C:\Users\emre\Desktop\aaa')             # Path part of raw images will be written in this part
 #Windows filepath
-images_path = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
+# images_path = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
+images_path = os.path.join('r:\\','proc_field','RedEdge3')
 
 #RRDP
 image_names = glob.glob(os.path.join(images_path,'IMG_0309_*.tif'))

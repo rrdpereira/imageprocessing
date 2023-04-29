@@ -5,14 +5,16 @@ from micasense.panel import Panel
 #Linux filepath
 #imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
 #Windows filepath
-imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
+imagePath = os.path.join('r:\\','proc_field','RedEdge3')
 
 # imagePath = os.path.join('.','data','RedEdge3')
 #imagePath = os.path.join('.','Users','rpereira','Documents','IMAmt_Sorriso','2020','05.29.2020-IMA_Sorriso','RedEdge','05cm_11h')
 #imagePath = os.path('C:\\Users\\rpereira\\Documents\\IMAmt_Sorriso\\2020\\05.29.2020-IMA_Sorriso\\RedEdge\\05cm_11h')
 print(imagePath)
 #imageName = glob.glob(os.path.join(imagePath,'IMG_0000_1.tif'))[0]
-imageName = glob.glob(os.path.join(imagePath,'IMG_00**_*.tif'))[0]
+# imageName = glob.glob(os.path.join(imagePath,'IMG_00**_*.tif'))[0]
+imageName = glob.glob(os.path.join(imagePath,'IMG_006*_1.tif'))[0]
 print(imageName)
 
 img = Image(imageName)
