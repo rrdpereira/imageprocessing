@@ -415,43 +415,58 @@ class Image(object):
         self.__undistorted_image = cv2.remap(image, map1, map2, cv2.INTER_LINEAR)
         return self.__undistorted_image
 
-    def plot_raw(self, title=None, figsize=None):
+    # RRDP
+    def plot_raw(self, title=None, figsize=None, num=None):
         ''' Create a single plot of the raw image '''
         if title is None:
             title = '{} Band {} Raw DN'.format(self.band_name, self.band_index)
-        return plotutils.plotwithcolorbar(self.raw(), title=title, figsize=figsize)
+        # RRDP
+        return plotutils.plotwithcolorbar(self.raw(), title=title, figsize=figsize, num=num)
 
-    def plot_intensity(self, title=None, figsize=None):
+    # RRDP
+    def plot_intensity(self, title=None, figsize=None, num=None):
         ''' Create a single plot of the image converted to uncalibrated intensity '''
         if title is None:
             title = '{} Band {} Intensity (DN*sec)'.format(self.band_name, self.band_index)
-        return plotutils.plotwithcolorbar(self.intensity(), title=title, figsize=figsize)
+        # RRDP
+        return plotutils.plotwithcolorbar(self.intensity(), title=title, figsize=figsize, num=num)
 
-
-    def plot_radiance(self, title=None, figsize=None):
+    # RRDP
+    def plot_radiance(self, title=None, figsize=None, num=None):
         ''' Create a single plot of the image converted to radiance '''
         if title is None:
             title = '{} Band {} Radiance'.format(self.band_name, self.band_index)
-        return plotutils.plotwithcolorbar(self.radiance(), title=title, figsize=figsize)
+        # RRDP
+        return plotutils.plotwithcolorbar(self.radiance(), title=title, figsize=figsize, num=num)
 
-    def plot_vignette(self, title=None, figsize=None):
+    # RRDP
+    def plot_vignette(self, title=None, figsize=None, num=None):
         ''' Create a single plot of the vignette '''
         if title is None:
             title = '{} Band {} Vignette'.format(self.band_name, self.band_index)
-        return plotutils.plotwithcolorbar(self.plottable_vignette(), title=title, figsize=figsize)
+        # RRDP
+        return plotutils.plotwithcolorbar(self.plottable_vignette(), title=title, figsize=figsize, num=num)
 
-    def plot_undistorted_radiance(self, title=None, figsize=None):
+    # RRDP
+    def plot_undistorted_radiance(self, title=None, figsize=None, num=None):
         ''' Create a single plot of the undistorted radiance '''
         if title is None:
             title = '{} Band {} Undistorted Radiance'.format(self.band_name, self.band_index)
-        return plotutils.plotwithcolorbar(self.undistorted(self.radiance()), title=title, figsize=figsize)
+        # RRDP
+        return plotutils.plotwithcolorbar(self.undistorted(self.radiance()), title=title, figsize=figsize, num=num)
 
-    def plot_all(self, figsize=(13,10)):
+    # RRDP
+    # def plot_all(self,figsize=(13,10)):
+    # to:
+    def plot_all(self,figsize,num):
         plots = [self.raw(), self.plottable_vignette(), self.radiance(), self.undistorted(self.radiance())]
         plot_types = ['Raw', 'Vignette', 'Radiance', 'Undistorted Radiance']
         titles = ['{} Band {} {}'.format(str(self.band_name), str(self.band_index), tpe)
                  for tpe in plot_types]
-        plotutils.subplotwithcolorbar(2, 2, plots, titles, figsize=figsize)
+        # RRDP
+        # plotutils.subplotwithcolorbar(2,2,plots,titles,figsize=figsize)
+        # to
+        plotutils.subplotwithcolorbar(2,2,plots,titles,figsize=figsize,num=num)
 
         #get the homography that maps from this image to the reference image
     def get_homography(self,ref,R=None,T=None):

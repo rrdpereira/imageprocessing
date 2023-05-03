@@ -305,9 +305,15 @@ class Panel(object):
             cv2.putText(display_img, str(self.serial).split('_')[0], (xloc,yloc), font, 1, 255, 2)
         return display_img
 
-    def plot(self, figsize=(14,14)):
+    # RRDP
+    # def plot(self,figsize=(14,14)):
+    # to:
+    def plot(self,figsize,num):        
         display_img = self.plot_image()
-        fig, ax = plt.subplots(figsize=figsize)
+        # RRDP
+        # fig, ax = plt.subplots(figsize=figsize)
+        # to:
+        fig, ax = plt.subplots(figsize=figsize,num=num)
         ax.imshow(display_img)
         plt.tight_layout()
         plt.show()

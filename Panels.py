@@ -1,6 +1,14 @@
 import os, glob
 from micasense.image import Image
 from micasense.panel import Panel
+import matplotlib.pyplot as plt
+
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
 
 #Linux filepath
 #imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
@@ -33,9 +41,25 @@ print("Standard Deviation: {}".format(std))
 print("Panel Pixel Count: {}".format(num))
 print("Saturated Pixel Count: {}".format(sat_count))
 
-panel.plot();
+panel.plot(figsize=(9,6.75),num=1)
+# #initialize belief
+# mu = [0.0, 0.0, 0.0]
+# sigma = np.array([[1.0, 0.0, 0.0],\
+#                     [0.0, 1.0, 0.0],\
+#                     [0.0, 0.0, 1.0]])
 
-""" imagePath = os.path.join('.','data','0000SET','000')
+# map_limits = [-1, 12, -1, 10]
+#   
+# plt.figure(figsize=(8,8),num=1)
+# plt.grid()
+# plt.axis(map_limits)
+# plt.ylabel("y[m]")
+# plt.xlabel("x[m]")
+# plt.title("Mobile Robot estimated POSITIONS by EFK", loc = "center")
+# plt.savefig("FigP00_EKFrouteXY.png", format = "png", dpi = 300)
+# plt.show()
+
+imagePath = os.path.join('.','data','0000SET','000')
 print(imagePath)
 imageName = glob.glob(os.path.join(imagePath,'IMG_0000_1.tif'))[0]
 print(imageName)
@@ -54,4 +78,20 @@ print("Standard Deviation: {}".format(std))
 print("Panel Pixel Count: {}".format(num))
 print("Saturated Pixel Count: {}".format(sat_count))
 
-panel.plot(); """
+panel.plot(figsize=(9,6.75),num=2)
+# #initialize belief
+# mu = [0.0, 0.0, 0.0]
+# sigma = np.array([[1.0, 0.0, 0.0],\
+#                     [0.0, 1.0, 0.0],\
+#                     [0.0, 0.0, 1.0]])
+
+# map_limits = [-1, 12, -1, 10]
+#   
+# plt.figure(figsize=(8,8),num=1)
+# plt.grid()
+# plt.axis(map_limits)
+# plt.ylabel("y[m]")
+# plt.xlabel("x[m]")
+# plt.title("Mobile Robot estimated POSITIONS by EFK", loc = "center")
+# plt.savefig("FigP00_EKFrouteXY.png", format = "png", dpi = 300)
+# plt.show()

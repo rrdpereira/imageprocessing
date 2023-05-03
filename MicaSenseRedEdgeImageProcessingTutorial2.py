@@ -1,10 +1,19 @@
 import os
 import micasense.image as image
-#%matplotlib inline
+
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
+
+imagePath = os.path.join('.','data','0000SET','000')
+imageName = os.path.join(imagePath,'IMG_0000_4.tif')
 
 image_path = os.path.join('.','data','0000SET','000','IMG_0000_1.tif')
 img = image.Image(image_path)
-img.plot_raw();
+img.plot_raw(figsize=(9,6.75),num=1)
 
 print('{0} {1} firmware version: {2}'.format(img.meta.camera_make(),
                                              img.meta.camera_model(), 
@@ -25,12 +34,13 @@ import micasense.capture as capture
 images_path = os.path.join('.','data','0000SET','000')
 image_names = glob.glob(os.path.join(images_path,'IMG_0000_*.tif'))
 cap = capture.Capture.from_filelist(image_names)
-cap.plot_radiance();
+# cap.plot_radiance(fig_size=(9,6.75),num=2)
+cap.plot_radiance(fig_size=(9,8),num=2)
 
 import matplotlib.pyplot as plt
 
 print(cap.band_names())
-fig = plt.figure(figsize=(14,6))
+fig = plt.figure(figsize=(14,6),num=3)
 plt.subplot(1,2,1)
 plt.scatter(cap.center_wavelengths(), cap.dls_irradiance())
 plt.ylabel('Irradiance $(W/m^2/nm)$')
@@ -68,7 +78,7 @@ print("Panel raw pixel standard deviation: {}".format(std))
 print("Panel region pixel count: {}".format(count))
 print("Panel region saturated pixel count: {}".format(count))
 
-pnl.plot();
+pnl.plot(figsize=(9,6.75),num=4)
 
 from ipywidgets import FloatProgress
 from IPython.display import display

@@ -28,9 +28,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.pylab import cm
 
-def plotwithcolorbar(img, title=None, figsize=None, vmin=None, vmax=None):
+# RRDP
+def plotwithcolorbar(img, title=None, figsize=None, vmin=None, vmax=None, num=None):
     ''' Plot an image with a colorbar '''
-    fig, axis = plt.subplots(1, 1, figsize=figsize)
+    # RRDP
+    fig, axis = plt.subplots(1,1,figsize=figsize,num=num)
     rad2 = axis.imshow(img, vmin=vmin, vmax=vmax)
     axis.set_title(title)
     divider = make_axes_locatable(axis)
@@ -40,9 +42,11 @@ def plotwithcolorbar(img, title=None, figsize=None, vmin=None, vmax=None):
     plt.show()
     return fig, axis
 
-def subplotwithcolorbar(rows, cols, images, titles=None, figsize=None):
+# RRDP
+def subplotwithcolorbar(rows, cols, images, titles=None, figsize=None, num=None):
     ''' Plot a set of images in subplots '''
-    fig, axes = plt.subplots(rows, cols, figsize=figsize,squeeze=False)
+    # RRDP
+    fig, axes = plt.subplots(rows,cols,figsize=figsize,num=num,squeeze=False)
     for i in range(cols*rows):
         column = int(i%cols)
         row = int(i/cols)
@@ -106,6 +110,8 @@ def colormap(cmap):
     Could be one of 'gray, viridis, plasma, inferno, magma, nipy_spectral'
     '''
     plt.set_cmap(cmap)
+    # RRDP
+    plt.close()
 
 import numpy as np
 def plot_ned_vector3d(x,y,z, u=0,v=0,w=0, title=None, figsize=(8,5)):

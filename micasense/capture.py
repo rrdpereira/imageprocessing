@@ -149,7 +149,10 @@ class Capture(object):
         """
         return np.argmin((np.array([i.rig_xy_offset_in_px() for i in self.images]) ** 2).sum(1))
 
-    def __plot(self, images, num_cols=2, plot_type=None, color_bar=True, fig_size=(14, 14)):
+    # RRDP
+    # def __plot(self, images, num_cols=2, plot_type=None, color_bar=True, fig_size=(14, 14)):
+    # to:
+    def __plot(self, images, num_cols=2, plot_type=None, color_bar=True, titles=None, fig_size=None, num=None):
         """
         Plot the Images from the Capture.
         :param images: List of Image objects
@@ -170,9 +173,11 @@ class Capture(object):
             ]
         num_rows = int(math.ceil(float(len(self.images)) / float(num_cols)))
         if color_bar:
-            return plotutils.subplotwithcolorbar(num_rows, num_cols, images, titles, fig_size)
+            # RRDP
+            return plotutils.subplotwithcolorbar(num_rows, num_cols, images, titles, fig_size, num)
         else:
-            return plotutils.subplot(num_rows, num_cols, images, titles, fig_size)
+            # RRDP
+            return plotutils.subplot(num_rows, num_cols, images, titles, fig_size, num)
 
     def __lt__(self, other):
         return self.utc_time() < other.utc_time()
@@ -248,10 +253,12 @@ class Capture(object):
         self.__plot([img.vignette()[0].T for img in self.images],
                     plot_type='Vignette')
 
-    def plot_radiance(self):
+    # RRDP
+    def plot_radiance(self, titles=None, fig_size=None, num=None):
         """Compute (if necessary) and plot radiance images."""
+        # RRDP
         self.__plot([img.radiance() for img in self.images],
-                    plot_type='Radiance')
+                    plot_type='Radiance', titles=titles, fig_size=fig_size, num=num)
 
     def plot_undistorted_radiance(self):
         """Compute (if necessary) and plot undistorted radiance images."""
@@ -259,14 +266,16 @@ class Capture(object):
             [img.undistorted(img.radiance()) for img in self.images],
             plot_type='Undistorted Radiance')
 
-    def plot_undistorted_reflectance(self, irradiance_list):
+    # RRDP
+    def plot_undistorted_reflectance(self, irradiance_list, titles=None, fig_size=None, num=None):
         """
         Compute (if necessary) and plot reflectances given a list of irradiances.
         :param irradiance_list: List returned from Capture.dls_irradiance() or Capture.panel_irradiance()
         """
+        # RRDP
         self.__plot(
             self.undistorted_reflectance(irradiance_list),
-            plot_type='Undistorted Reflectance')
+            plot_type='Undistorted Reflectance', titles=titles, fig_size=fig_size, num=num)
 
     def compute_radiance(self):
         """

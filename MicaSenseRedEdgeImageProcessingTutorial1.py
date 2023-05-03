@@ -3,7 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os,glob
 import math
-#%matplotlib inline
+
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
 
 imagePath = os.path.join('.','data','0000SET','000')
 imageName = os.path.join(imagePath,'IMG_0000_4.tif')
@@ -13,7 +19,7 @@ imageName = os.path.join(imagePath,'IMG_0000_4.tif')
 imageRaw=plt.imread(imageName)
 
 # Display the image
-fig, ax = plt.subplots(figsize=(8,6))
+fig, ax = plt.subplots(figsize=(9,6.75),num=1)
 ax.imshow(imageRaw, cmap='gray')
 plt.show()
 
@@ -21,10 +27,9 @@ import micasense.plotutils as plotutils
 
 # Optional: pick a color map that fits your viewing style
 # one of 'gray, viridis, plasma, inferno, magma, nipy_spectral'
-plotutils.colormap('viridis'); 
+plotutils.colormap('magma')
 
-fig = plotutils.plotwithcolorbar(imageRaw, title='Raw image values with colorbar')
-#plt.show()
+fig = plotutils.plotwithcolorbar(imageRaw, title='Raw image values with colorbar',num=2)
 
 import micasense.metadata as metadata
 exiftoolPath = None
@@ -53,11 +58,11 @@ print('Focal Length: {0}'.format(meta.get_item('XMP:FocalLength')))
 
 import micasense.utils as msutils
 radianceImage, L, V, R = msutils.raw_image_to_radiance(meta, imageRaw)
-plotutils.plotwithcolorbar(V,'Vignette Factor');
-plotutils.plotwithcolorbar(R,'Row Gradient Factor');
-plotutils.plotwithcolorbar(V*R,'Combined Corrections');
-plotutils.plotwithcolorbar(L,'Vignette and row gradient corrected raw values');
-plotutils.plotwithcolorbar(radianceImage,'All factors applied and scaled to radiance');
+plotutils.plotwithcolorbar(V,'Vignette Factor',num=3)
+plotutils.plotwithcolorbar(R,'Row Gradient Factor',num=4)
+plotutils.plotwithcolorbar(V*R,'Combined Corrections',num=5)
+plotutils.plotwithcolorbar(L,'Vignette and row gradient corrected raw values',num=6)
+plotutils.plotwithcolorbar(radianceImage,'All factors applied and scaled to radiance',num=7)
 
 markedImg = radianceImage.copy()
 ulx = 660 # upper left column (x coordinate) of panel area
@@ -77,7 +82,7 @@ panelCalibration = {
 
 # Select panel region from radiance image
 panelRegion = radianceImage[uly:lry, ulx:lrx]
-plotutils.plotwithcolorbar(markedImg, 'Panel region in radiance image')
+plotutils.plotwithcolorbar(markedImg, 'Panel region in radiance image',num=8)
 meanRadiance = panelRegion.mean()
 print('Mean Radiance in panel region: {:1.3f} W/m^2/nm/sr'.format(meanRadiance))
 panelReflectance = panelCalibration[bandName]
@@ -85,12 +90,12 @@ radianceToReflectance = panelReflectance / meanRadiance
 print('Radiance to reflectance conversion factor: {:1.3f}'.format(radianceToReflectance))
 
 reflectanceImage = radianceImage * radianceToReflectance
-plotutils.plotwithcolorbar(reflectanceImage, 'Converted Reflectane Image');
+plotutils.plotwithcolorbar(reflectanceImage, 'Converted Reflectane Image',num=9)
 
 panelRegionRaw = imageRaw[uly:lry, ulx:lrx]
 panelRegionRefl = reflectanceImage[uly:lry, ulx:lrx]
 panelRegionReflBlur = cv2.GaussianBlur(panelRegionRefl,(55,55),5)
-plotutils.plotwithcolorbar(panelRegionReflBlur, 'Smoothed panel region in reflectance image')
+plotutils.plotwithcolorbar(panelRegionReflBlur, 'Smoothed panel region in reflectance image',num=10)
 print('Min Reflectance in panel region: {:1.2f}'.format(panelRegionRefl.min()))
 print('Max Reflectance in panel region: {:1.2f}'.format(panelRegionRefl.max()))
 print('Mean Reflectance in panel region: {:1.2f}'.format(panelRegionRefl.mean()))
@@ -98,13 +103,13 @@ print('Standard deviation in region: {:1.4f}'.format(panelRegionRefl.std()))
 
 # correct for lens distortions to make straight lines straight
 undistortedReflectance = msutils.correct_lens_distortion(meta, reflectanceImage)
-plotutils.plotwithcolorbar(undistortedReflectance, 'Undistorted reflectance image');
+plotutils.plotwithcolorbar(undistortedReflectance, 'Undistorted reflectance image',num=11)
 
 flightImageName = os.path.join(imagePath,'IMG_0001_4.tif')
 flightImageRaw=plt.imread(flightImageName)
-plotutils.plotwithcolorbar(flightImageRaw, 'Raw Image')
+plotutils.plotwithcolorbar(flightImageRaw, 'Raw Image',num=12)
 
 flightRadianceImage, _, _, _ = msutils.raw_image_to_radiance(meta, flightImageRaw)
 flightReflectanceImage = flightRadianceImage * radianceToReflectance
 flightUndistortedReflectance = msutils.correct_lens_distortion(meta, flightReflectanceImage)
-plotutils.plotwithcolorbar(flightUndistortedReflectance, 'Reflectance converted and undistorted image');
+plotutils.plotwithcolorbar(flightUndistortedReflectance, 'Reflectance converted and undistorted image',num=13)

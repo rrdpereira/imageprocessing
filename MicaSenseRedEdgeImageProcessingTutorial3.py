@@ -4,6 +4,13 @@ import micasense.dls as dls
 import os, glob
 import micasense.capture as capture
 
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
+
 images_path = os.path.join('.','data','0000SET','000')
 image_names = glob.glob(os.path.join(images_path,'IMG_0000_*.tif'))
 cap = capture.Capture.from_filelist(image_names)
@@ -14,7 +21,7 @@ panelCorners = [[[809,613],[648,615],[646,454],[808,452]],
                 [[829,658],[668,659],[668,496],[829,496]],
                 [[807,632],[648,634],[645,473],[805,471]]]
 
-cap.set_panelCorners(panelCorners)
+cap.set_panel_corners(panelCorners)
 
 # Define DLS sensor orientation vector relative to dls pose frame
 dls_orientation_vector = np.array([0,0,-1])
@@ -49,12 +56,13 @@ for img in cap.images:
     center_wavelengths.append(img.center_wavelength)
 
 import matplotlib.pyplot as plt
+plt.figure(figsize=(9,6.75),num=1)
 plt.scatter(center_wavelengths,dls_irradiances)
 plt.xlabel('Wavelength (nm)')
 plt.ylabel('Irradiance ($W/m^2/nm$)')
-plt.show();
+plt.show()
 
-cap.plot_undistorted_reflectance(dls_irradiances)
+cap.plot_undistorted_reflectance(dls_irradiances,fig_size=(9,8),num=2)
 
 import math
 
@@ -63,11 +71,11 @@ panel_reflectance_by_band = [0.67, 0.69, 0.68, 0.61, 0.67] #RedEdge band_index o
 panel_radiances = np.array(cap.panel_radiance())
 irr_from_panel = math.pi * panel_radiances / panel_reflectance_by_band
 dls_correction = irr_from_panel/dls_irradiances
-cap.plot_undistorted_reflectance(dls_irradiances*dls_correction)
+cap.plot_undistorted_reflectance(dls_irradiances*dls_correction,fig_size=(9,8),num=3)
 
+plt.figure(figsize=(9,6.75),num=4)
 plt.scatter(cap.center_wavelengths(), cap.panel_reflectance())
 plt.title("Panel Reflectances")
 plt.xlabel("Wavelength (nm)")
 plt.ylabel("Reflectance")
 plt.show()
-

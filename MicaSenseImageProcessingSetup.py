@@ -6,6 +6,13 @@ import pyzbar.pyzbar as pyzbar
 import matplotlib.pyplot as plt
 import mapboxgl
 
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
+
 print()
 print("Successfully imported all required libraries.")
 print()
@@ -27,14 +34,15 @@ except Exception as e:
     print(e)
 
 from micasense.image import Image
+
 imagePath = os.path.join('.','data','0000SET','000')
 print(imagePath)
 imageName = glob.glob(os.path.join(imagePath,'IMG_0000_1.tif'))[0]
 print(imageName)
 
 img = Image(imageName)
-img.plot_raw(figsize=(8.73,8.73));
 #plt.figure(1)
+img.plot_raw(figsize=(9,6.75),num=1)
 
 from micasense.panel import Panel
 panel = Panel(img)
@@ -42,6 +50,6 @@ if not panel.panel_detected():
     raise IOError("Panel Not Detected! Check your installation of pyzbar")
 else:
     #plt.figure(2)
-    panel.plot(figsize=(8,8));
+    panel.plot(figsize=(9,6.75),num=2)
 
 print('Success! Now you are ready for Part 1 of the tutorial.')
