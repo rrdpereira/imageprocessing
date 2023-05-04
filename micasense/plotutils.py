@@ -89,9 +89,11 @@ def plot_overlay_withcolorbar(imgbase, imgcolor, title=None, figsize=None, vmin=
         plt.show()
     return fig, axis[0][0]
 
-def subplot(rows, cols, images, titles=None, figsize=None):
+# RRDP
+def subplot(rows, cols, images, titles=None, figsize=None, num=None):
     ''' Plot a set of images in subplots '''
-    fig, axes = plt.subplots(rows, cols, figsize=figsize, squeeze=False)
+    # RRDP
+    fig, axes = plt.subplots(rows, cols, figsize=figsize, num=num, squeeze=False)
     for i in range(cols*rows):
         column = int(i%cols)
         row = int(i/cols)

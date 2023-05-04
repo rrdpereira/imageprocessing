@@ -18,6 +18,7 @@ img = cv2.imread('dark_tones.jpg')
 hist = cv2.calcHist([img],[0],None,[256],[0,256])
 
 # plot the above computed histogram
+plt.figure(figsize=(9,6.75),num=1)
 plt.plot(hist, color='b')
 plt.title('Image Histogram For Blue Channel GFG')
 plt.show()

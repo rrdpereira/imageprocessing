@@ -243,15 +243,19 @@ class Capture(object):
         """Returns (yaw, pitch, roll) tuples in radians of the earth-fixed DLS pose."""
         return self.images[0].dls_yaw, self.images[0].dls_pitch, self.images[0].dls_roll
 
-    def plot_raw(self):
+    # RRDP
+    def plot_raw(self, titles=None, fig_size=None, num=None):
         """Plot raw images as the data came from the camera."""
+        # RRDP
         self.__plot([img.raw() for img in self.images],
-                    plot_type='Raw')
+                    plot_type='Raw', titles=titles, fig_size=fig_size, num=num)
 
-    def plot_vignette(self):
+    # RRDP
+    def plot_vignette(self, titles=None, fig_size=None, num=None):
         """Compute (if necessary) and plot vignette correction images."""
+        # RRDP
         self.__plot([img.vignette()[0].T for img in self.images],
-                    plot_type='Vignette')
+                    plot_type='Vignette', titles=titles, fig_size=fig_size, num=num)
 
     # RRDP
     def plot_radiance(self, titles=None, fig_size=None, num=None):
@@ -260,11 +264,13 @@ class Capture(object):
         self.__plot([img.radiance() for img in self.images],
                     plot_type='Radiance', titles=titles, fig_size=fig_size, num=num)
 
-    def plot_undistorted_radiance(self):
+    # RRDP
+    def plot_undistorted_radiance(self, titles=None, fig_size=None, num=None):
         """Compute (if necessary) and plot undistorted radiance images."""
+        # RRDP
         self.__plot(
             [img.undistorted(img.radiance()) for img in self.images],
-            plot_type='Undistorted Radiance')
+            plot_type='Undistorted Radiance', titles=titles, fig_size=fig_size, num=num)
 
     # RRDP
     def plot_undistorted_reflectance(self, irradiance_list, titles=None, fig_size=None, num=None):
@@ -434,15 +440,17 @@ class Capture(object):
             self.detected_panel_count = len(self.panel_corners)
         return self.detected_panel_count
 
-    def plot_panels(self):
+    # RRDP
+    def plot_panels(self, color_bar=None, titles=None, fig_size=None, num=None):
         """Plot Panel images."""
         if self.panels is None:
             if not self.panels_in_all_expected_images():
                 raise IOError("Panels not detected in all images.")
+        # RRDP
         self.__plot(
             [p.plot_image() for p in self.panels],
             plot_type='Panels',
-            color_bar=False
+            color_bar=color_bar, titles=titles, fig_size=fig_size, num=num
         )
 
     def set_external_rig_relatives(self, external_rig_relatives):

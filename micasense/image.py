@@ -458,7 +458,7 @@ class Image(object):
     # RRDP
     # def plot_all(self,figsize=(13,10)):
     # to:
-    def plot_all(self,figsize,num):
+    def plot_all(self,figsize=None,num=None):
         plots = [self.raw(), self.plottable_vignette(), self.radiance(), self.undistorted(self.radiance())]
         plot_types = ['Raw', 'Vignette', 'Radiance', 'Undistorted Radiance']
         titles = ['{} Band {} {}'.format(str(self.band_name), str(self.band_index), tpe)

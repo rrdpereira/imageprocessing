@@ -14,6 +14,17 @@ import micasense.imageset as imageset
 import micasense.utils as msutils
 import micasense.plotutils as plotutils 
 import subprocess
+import micasense.panel as panel
+from ipywidgets import FloatProgress, Layout
+from IPython.display import display
+import pandas as pd
+
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
 
 #RRDP
 #Linux filepath
