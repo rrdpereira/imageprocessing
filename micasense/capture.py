@@ -134,6 +134,8 @@ class Capture(object):
         :param file_list: List of str system file paths.
         :return: Capture object.
         """
+        # RRDP
+        print('len(file_list): {0}'.format(len(file_list)))
         if len(file_list) == 0:
             raise IOError("No files provided. Check your file paths.")
         for file in file_list:
@@ -390,17 +392,35 @@ class Capture(object):
 
     def panel_irradiance(self, reflectances=None):
         """Return a list of mean panel region values for irradiance values."""
+        print('panel_irradiance_Flag00')
         if self.panels is None:
+            print('panel_irradiance_Flag01')
             if not self.panels_in_all_expected_images():
+                print('panel_irradiance_Flag02')
                 raise IOError("Panels not detected in all images.")
         if reflectances is None:
             reflectances = [panel.reflectance_from_panel_serial() for panel in self.panels]
+            print('panel_irradiance_Flag03')
         if len(reflectances) != len(self.panels):
+            print('panel_irradiance_Flag04')
             raise ValueError("Length of panel reflectances must match length of Images.")
+        print('panel_irradiance_Flag05')
         irradiance_list = []
         for i, p in enumerate(self.panels):
+            # RRDP
+            print('panel_irradiance_Flag06a')
+            print('i: {0}'.format(i))
+            print('panel_irradiance_Flag06b')
+            print('p: {0}'.format(p))
+            print('panel_irradiance_Flag06c')
             mean_irr = p.irradiance_mean(reflectances[i])
+            # RRDP
+            print('panel_irradiance_Flag06c')
+            print('mean_irr: {0}'.format(mean_irr))
+            print('panel_irradiance_Flag06d')
             irradiance_list.append(mean_irr)
+            # RRDP
+            print('irradiance_list: {0}'.format(irradiance_list))
         return irradiance_list
 
     def panel_reflectance(self, panel_refl_by_band=None):  # FIXME: panel_refl_by_band parameter isn't used?

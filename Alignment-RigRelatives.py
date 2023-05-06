@@ -13,12 +13,21 @@ from osgeo import gdal, gdal_array
 from micasense import plotutils
 import matplotlib.pyplot as plt
 
+import sys, time, os, datetime
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
+
+DataIMG="IMG_0"
+PlaqueIMG="IMG_0000_"
 panelNames = None
 
 # This is an altum image with RigRelatives and a thermal band
 imagePath = os.path.join('.','data','ALTUM1SET','000')
-imageNames = glob.glob(os.path.join(imagePath,'IMG_0008_*.tif'))
-panelNames = glob.glob(os.path.join(imagePath,'IMG_0000_*.tif'))
+imageNames = glob.glob(os.path.join(imagePath,DataIMG+'008_*.tif'))
+panelNames = glob.glob(os.path.join(imagePath,PlaqueIMG+'*.tif'))
 
 if panelNames is not None:
     panelCap = capture.Capture.from_filelist(panelNames)
@@ -38,7 +47,7 @@ if panelCap is not None:
         panel_reflectance_by_band = [0.67, 0.69, 0.68, 0.61, 0.67] #RedEdge band_index order
     panel_irradiance = panelCap.panel_irradiance(panel_reflectance_by_band)    
     img_type = "reflectance"
-    capture.plot_undistorted_reflectance(panel_irradiance)
+    capture.plot_undistorted_reflectance(panel_irradiance,fig_size=(9,14), num=1)
 else:
     if False: #capture.dls_present():
         img_type='reflectance'
@@ -83,7 +92,9 @@ for i in cir_band_indices:
     im_display[:,:,i] =  imageutils.normalize(im_aligned[:,:,i])
 
 cir = im_display[:,:,cir_band_indices]
-fig, axes = plt.subplots(1, 2, figsize=figsize)
+# RRDP
+# fig, axes = plt.subplots(1, 2, figsize=figsize,num=2)
+fig, axes = plt.subplots(1, 2, figsize=(9,8),num=2)
 axes[0].set_title("Red-Green-Blue Composite")
 axes[0].imshow(rgb)
 axes[1].set_title("Color Infrared (CIR) Composite")
@@ -101,7 +112,9 @@ unsharp_rgb[unsharp_rgb>1] = 1
 # Apply a gamma correction to make the render appear closer to what our eyes would see
 gamma = 1.4
 gamma_corr_rgb = unsharp_rgb**(1.0/gamma)
-fig = plt.figure(figsize=figsize)
+# RRDP
+# fig = plt.figure(figsize=figsize)
+fig = plt.figure(figsize=(9,8),num=3)
 plt.imshow(gamma_corr_rgb, aspect='equal')
 plt.axis('off')
 plt.show()
@@ -168,7 +181,7 @@ elif img_type == 'radiance':
 # Compute and display a histogram
 ndvi_hist_min = np.min(ndvi)
 ndvi_hist_max = np.max(ndvi)
-fig, axis = plt.subplots(1, 1, figsize=(10,4))
+fig, axis = plt.subplots(1, 1, figsize=(10,4),num=4)
 axis.hist(ndvi.ravel(), bins=512, range=(ndvi_hist_min, ndvi_hist_max))
 plt.title("NDVI Histogram")
 plt.show()
@@ -186,6 +199,7 @@ fig, axis = plotutils.plot_overlay_withcolorbar(gamma_corr_rgb,
                                     masked_ndvi, 
                                     figsize = figsize, 
                                     title = 'NDVI filtered to only plants over RGB base layer',
+                                    num=5,
                                     vmin = min_display_ndvi,
                                     vmax = max_display_ndvi)
 fig.savefig('ndvi_over_rgb.png')
@@ -199,7 +213,7 @@ masked_ndre = np.ma.masked_where(ndvi < min_display_ndvi, ndre)
 # Compute a histogram
 ndre_hist_min = np.min(masked_ndre)
 ndre_hist_max = np.max(masked_ndre)
-fig, axis = plt.subplots(1, 1, figsize=(10,4))
+fig, axis = plt.subplots(1, 1, figsize=(10,4),num=6)
 axis.hist(masked_ndre.ravel(), bins=512, range=(ndre_hist_min, ndre_hist_max))
 plt.title("NDRE Histogram (filtered to only plants)")
 plt.show()
@@ -209,7 +223,8 @@ max_display_ndre = np.percentile(masked_ndre, 99.5)
 
 fig, axis = plotutils.plot_overlay_withcolorbar(gamma_corr_rgb, 
                                     masked_ndre, 
-                                    figsize=figsize, 
+                                    figsize=figsize,
+                                    num=7, 
                                     title='NDRE filtered to only plants over RGB base layer',
                                     vmin=min_display_ndre,vmax=max_display_ndre)
 fig.savefig('ndre_over_rgb.png')
@@ -221,9 +236,8 @@ if im_aligned.shape[2] >= 5:
     # Alternatively we can mask the thermal only to plants here, which is useful for large contiguous areas
     # masked_thermal = np.ma.masked_where(ndvi < 0.45, im_aligned[:,:,5])
 
-
     # Compute a histogram
-    fig, axis = plt.subplots(1, 1, figsize=(10,4))
+    fig, axis = plt.subplots(1, 1, figsize=(10,4),num=8)
     axis.hist(masked_thermal.ravel(), bins=512, range=(np.min(masked_thermal), np.max(masked_thermal)))
     plt.title("Thermal Histogram")
     plt.show()
@@ -235,6 +249,7 @@ if im_aligned.shape[2] >= 5:
                                         masked_thermal, 
                                         figsize=figsize, 
                                         title='Temperature over True Color',
+                                        num=9,
                                         vmin=min_display_therm,vmax=max_display_therm,
                                         overlay_alpha=0.25,
                                         overlay_colormap='jet',

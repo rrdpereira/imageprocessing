@@ -25,6 +25,8 @@ capture.plot_vignette(fig_size=(9,8), num=2)
 
 capture.plot_undistorted_radiance(fig_size=(9,8), num=3)
 
-capture.plot_panels(fig_size=(9,8), num=4, color_bar=False)
+# capture.plot_undistorted_reflectance(fig_size=(9,8), num=4)
+
+capture.plot_panels(fig_size=(9,8), num=5, color_bar=False)
 
 # capture.save_bands_in_separate_file(fullOutputPath)

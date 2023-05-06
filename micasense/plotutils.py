@@ -63,9 +63,11 @@ def subplotwithcolorbar(rows, cols, images, titles=None, figsize=None, num=None)
     plt.show()
     return fig, axes
 
-def plot_overlay_withcolorbar(imgbase, imgcolor, title=None, figsize=None, vmin=None, vmax=None, overlay_alpha=1.0, overlay_colormap='viridis', overlay_steps=None, display_contours=False, contour_fmt=None, contour_steps=None, contour_alpha=None, show=True):
+# RRDP
+def plot_overlay_withcolorbar(imgbase, imgcolor, title=None, figsize=None, num=None, vmin=None, vmax=None, overlay_alpha=1.0, overlay_colormap='viridis', overlay_steps=None, display_contours=False, contour_fmt=None, contour_steps=None, contour_alpha=None, show=True):
     ''' Plot an image with a colorbar '''
-    fig, axis = plt.subplots(1, 1, figsize=figsize, squeeze=False)
+    # RRDP
+    fig, axis = plt.subplots(1, 1, figsize=figsize, num=num, squeeze=False)
     base = axis[0][0].imshow(imgbase)
     if overlay_steps is not None:
         overlay_colormap = cm.get_cmap(overlay_colormap,overlay_steps)

@@ -245,8 +245,12 @@ class Panel(object):
         """Provide regional statistics for a image over a region
         Inputs: img is any image ndarray, region is a skimage shape
         Outputs: mean, std, count, and saturated count tuple for the region"""
+        # RRDP
+        print("region: {}".format(region))
         rev_panel_pts = np.fliplr(region) #skimage and opencv coords are reversed
-        w, h = img.shape
+        # RRDP
+        print("rev_panel_pts: {}".format(rev_panel_pts))
+        w,h = img.shape
         mask = measure.grid_points_in_poly((w,h),rev_panel_pts)
         num_pixels = mask.sum()
         panel_pixels = img[mask]
