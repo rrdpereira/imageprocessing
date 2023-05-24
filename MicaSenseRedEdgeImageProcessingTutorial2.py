@@ -1,18 +1,40 @@
-import os
-import micasense.image as image
+#!/usr/bin/env python
+# coding: utf-8
 
-import sys, time, os, datetime
+import sys, time, os, datetime, glob
+import micasense.image as image
+import micasense.panel as panel
+import micasense.capture as capture
+import micasense.imageset as imageset
+from ipywidgets import FloatProgress
+from IPython.display import display
+import matplotlib.pyplot as plt
+
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
 os.system("which python")
 print(f"(Python version) :#: {python_version()} :#:")
 
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
+
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
 imagePath = os.path.join('.','data','0000SET','000')
-imageName = os.path.join(imagePath,'IMG_0000_4.tif')
+print(imagePath)
+
+imageName = glob.glob(os.path.join(imagePath,'IMG_0000_4.tif'))[0]
+print(imageName)
 
 image_path = os.path.join('.','data','0000SET','000','IMG_0000_1.tif')
+
 img = image.Image(image_path)
+
 img.plot_raw(figsize=(9,6.75),num=1)
 
 print('{0} {1} firmware version: {2}'.format(img.meta.camera_make(),
@@ -28,16 +50,24 @@ print('Bandwidth: {0} nm'.format(img.meta.bandwidth()))
 print('Capture ID: {0}'.format(img.meta.capture_id()))
 print('Flight ID: {0}'.format(img.meta.flight_id()))
 
-import os, glob
-import micasense.capture as capture
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
 
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
 images_path = os.path.join('.','data','0000SET','000')
+print(images_path)
+
 image_names = glob.glob(os.path.join(images_path,'IMG_0000_*.tif'))
+print(image_names)
+
 cap = capture.Capture.from_filelist(image_names)
 # cap.plot_radiance(fig_size=(9,6.75),num=2)
 cap.plot_radiance(fig_size=(9,8),num=2)
-
-import matplotlib.pyplot as plt
 
 print(cap.band_names())
 fig = plt.figure(figsize=(14,6),num=3)
@@ -52,11 +82,18 @@ plt.ylim([0,2.5e-3])
 plt.ylabel('Exposure Time (s)')
 plt.show()
 
-import os, glob
-import micasense.image as image
-import micasense.panel as panel
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
 
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
 image_path = os.path.join('.','data','0000SET','000','IMG_0000_1.tif')
+print(image_path)
+
 img = image.Image(image_path)
 # panelCorners - if we dont have zbar installed to scan the QR codes, detect panel manually and 
 panelCorners = [[[809,613],[648,615],[646,454],[808,452]],
@@ -80,16 +117,23 @@ print("Panel region saturated pixel count: {}".format(count))
 
 pnl.plot(figsize=(9,6.75),num=4)
 
-from ipywidgets import FloatProgress
-from IPython.display import display
 f = FloatProgress(min=0, max=1)
 display(f)
 def update_f(val):
     f.value=val
 
-import micasense.imageset as imageset
-import os
+
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
 images_dir = os.path.join('.','data','0000SET')
+
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
+print(images_dir)
 
 imgset = imageset.ImageSet.from_directory(images_dir, progress_callback=update_f)
 

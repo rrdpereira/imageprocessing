@@ -1,18 +1,34 @@
-import numpy as np
+#!/usr/bin/env python
+# coding: utf-8
+
+import sys, time, os, datetime, glob
 import micasense.dls as dls
-
-import os, glob
 import micasense.capture as capture
+import numpy as np
+import math
+import matplotlib.pyplot as plt
 
-import sys, time, os, datetime
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
 os.system("which python")
 print(f"(Python version) :#: {python_version()} :#:")
 
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
+
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
 images_path = os.path.join('.','data','0000SET','000')
+print(images_path)
+
 image_names = glob.glob(os.path.join(images_path,'IMG_0000_*.tif'))
+print(image_names)
+
 cap = capture.Capture.from_filelist(image_names)
 # set panel corners manually if zbar is not installed
 panelCorners = [[[809,613],[648,615],[646,454],[808,452]],
@@ -55,7 +71,6 @@ for img in cap.images:
     dls_irradiances.append(dls_irr)
     center_wavelengths.append(img.center_wavelength)
 
-import matplotlib.pyplot as plt
 plt.figure(figsize=(9,6.75),num=1)
 plt.scatter(center_wavelengths,dls_irradiances)
 plt.xlabel('Wavelength (nm)')
@@ -63,8 +78,6 @@ plt.ylabel('Irradiance ($W/m^2/nm$)')
 plt.show()
 
 cap.plot_undistorted_reflectance(dls_irradiances,fig_size=(9,8),num=2)
-
-import math
 
 panel_reflectance_by_band = [0.67, 0.69, 0.68, 0.61, 0.67] #RedEdge band_index order
 

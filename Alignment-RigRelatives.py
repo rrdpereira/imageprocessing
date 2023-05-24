@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import os, glob
+import sys, time, os, datetime, glob
 import micasense.capture as capture
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
 import micasense.imageutils as imageutils
 import micasense.plotutils as plotutils
+from micasense import plotutils
+import cv2
+import numpy as np
 import imageio
 from osgeo import gdal, gdal_array
-from micasense import plotutils
 import matplotlib.pyplot as plt
 
-import sys, time, os, datetime
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")

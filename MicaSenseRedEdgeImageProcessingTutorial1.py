@@ -1,18 +1,35 @@
-import cv2
-import matplotlib.pyplot as plt
-import numpy as np
-import os,glob
-import math
+#!/usr/bin/env python
+# coding: utf-8
 
-import sys, time, os, datetime
+import sys, time, os, datetime, glob
+import micasense.plotutils as plotutils
+import micasense.metadata as metadata
+import micasense.utils as msutils
+import cv2
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
 os.system("which python")
 print(f"(Python version) :#: {python_version()} :#:")
 
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
+
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
 imagePath = os.path.join('.','data','0000SET','000')
-imageName = os.path.join(imagePath,'IMG_0000_4.tif')
+print(imagePath)
+
+imageName = glob.glob(os.path.join(imagePath,'IMG_0000_4.tif'))[0]
+print(imageName)
 
 # Read raw image DN values
 # reads 16 bit tif - this will likely not work for 12 bit images
@@ -23,15 +40,12 @@ fig, ax = plt.subplots(figsize=(9,6.75),num=1)
 ax.imshow(imageRaw, cmap='gray')
 plt.show()
 
-import micasense.plotutils as plotutils
-
 # Optional: pick a color map that fits your viewing style
 # one of 'gray, viridis, plasma, inferno, magma, nipy_spectral'
 plotutils.colormap('magma')
 
 fig = plotutils.plotwithcolorbar(imageRaw, title='Raw image values with colorbar',num=2)
 
-import micasense.metadata as metadata
 exiftoolPath = None
 if os.name == 'nt':
     exiftoolPath = os.environ.get('exiftoolpath')
@@ -56,7 +70,6 @@ print('Capture ID: {0}'.format(meta.get_item('XMP:CaptureId')))
 print('Flight ID: {0}'.format(meta.get_item('XMP:FlightId')))
 print('Focal Length: {0}'.format(meta.get_item('XMP:FocalLength')))
 
-import micasense.utils as msutils
 radianceImage, L, V, R = msutils.raw_image_to_radiance(meta, imageRaw)
 plotutils.plotwithcolorbar(V,'Vignette Factor',num=3)
 plotutils.plotwithcolorbar(R,'Row Gradient Factor',num=4)

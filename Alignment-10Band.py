@@ -1,26 +1,31 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import os, glob
+import sys, time, os, datetime, glob
 import micasense.capture as capture
+import micasense.imageutils as imageutils
+import micasense.plotutils as plotutils
+from micasense import plotutils
 from micasense.image import Image
 from micasense.panel import Panel
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-import micasense.imageutils as imageutils
-import micasense.plotutils as plotutils
-from micasense import plotutils
-import matplotlib.pyplot as plt
 import imageio
 from osgeo import gdal, gdal_array
+import matplotlib.pyplot as plt
+
+from platform import python_version
+
+print(f"(Sys version) :|: {sys.version} :|:")
+os.system("which python")
+print(f"(Python version) :#: {python_version()} :#:")
 
 panelNames = None
 paneCap = None
 
-""" imagePath = os.path.join('.','data','10BANDSET','000')
-imageNames = glob.glob(os.path.join(imagePath,'IMG_0431_*.tif'))
-panelNames = glob.glob(os.path.join(imagePath,'IMG_0000_*.tif')) """
+# imagePath = os.path.join('.','data','10BANDSET','000')
+# imageNames = glob.glob(os.path.join(imagePath,'IMG_0431_*.tif'))
+# panelNames = glob.glob(os.path.join(imagePath,'IMG_0000_*.tif'))
 
 #Linux filepath
 #imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
@@ -29,6 +34,10 @@ panelNames = glob.glob(os.path.join(imagePath,'IMG_0000_*.tif')) """
 imagePath = os.path.join('r:\\','proc_field','RedEdge3')
 imageNames = glob.glob(os.path.join(imagePath,'IMG_0309_*.tif'))
 panelNames = glob.glob(os.path.join(imagePath,'IMG_0070_*.tif'))
+
+print("imagePath:\n{0}".format(imagePath))
+print("imageNames:\n{0}".format(imageNames))
+print("panelNames:\n{0}".format(panelNames))
 
 # Allow this code to align both radiance and reflectance images; bu excluding
 # a definition for panelNames above, radiance images will be used
@@ -57,7 +66,8 @@ if panelCap is not None:
         print('Flag01')
     else:
         #raise IOError("Comment this lne and set panel_reflectance_by_band here")
-        panel_reflectance_by_band = [0.67, 0.69, 0.68, 0.61, 0.67] #RedEdge band_index orde
+        # panel_reflectance_by_band = [0.67, 0.69, 0.68, 0.61, 0.67] #RedEdge band_index order
+        panel_reflectance_by_band = [0.57, 0.57, 0.56, 0.50, 0.55] #RedEdge3 band_index order
         # panel_reflectance_by_band = [0.55]*len(imageNames)
         print('Flag02a')
     panel_irradiance = panelCap.panel_irradiance(panel_reflectance_by_band)
@@ -78,10 +88,14 @@ else:
         print('Flag06')
 
 ## Alignment settings
-match_index = 4 # Index of the band, here we use green
-max_alignment_iterations = 20
+#RRDP
+match_index = 3 # Index of the band, 3 is NIR band
+#RRDP
+max_alignment_iterations = 30
+#RRDP
 warp_mode = cv2.MOTION_HOMOGRAPHY # MOTION_HOMOGRAPHY or MOTION_AFFINE. For Altum images only use HOMOGRAPHY
-pyramid_levels = 3 # for 10-band imagery we use a 3-level pyramid. In some cases
+#RRDP
+pyramid_levels = 2 # for 10-band imagery we use a 3-level pyramid. In some cases
 
 print("Alinging images. Depending on settings this can take from a few seconds to many minutes")
 # Can potentially increase max_iterations for better results, but longer runtimes
@@ -99,6 +113,7 @@ im_aligned = imageutils.aligned_capture(capture, warp_matrices, warp_mode, cropp
 # figsize=(30,23) # use this size for full-image-resolution display
 figsize=(16,13)   # use this size for export-sized display
 
+#RRDP
 #rgb_band_indices = [capture.band_names().index('Red'),capture.band_names().index('Green'),capture.band_names().index('Blue-444')]
 rgb_band_indices = [capture.band_names().index('Red'),capture.band_names().index('Green'),capture.band_names().index('Blue')]
 #cir_band_indices = [capture.band_names().index('NIR'),capture.band_names().index('Red'),capture.band_names().index('Green')]

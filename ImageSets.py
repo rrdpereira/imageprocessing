@@ -1,10 +1,17 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import sys, time, os, datetime, glob
 from ipywidgets import FloatProgress, Layout
 from IPython.display import display
 import micasense.imageset as imageset
-import os, glob
+import pandas as pd
+import math
+import numpy as np
+from mapboxgl.viz import *
+from mapboxgl.utils import df_to_geojson, create_radius_stops, scale_between, create_color_stops 
 import matplotlib.pyplot as plt
 
-import sys, time, os, datetime
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
@@ -18,27 +25,27 @@ def update_f(val):
     if (val - f.value) > 0.005 or val == 1: #reduces cpu usage from updating the progressbar by 10x
         f.value=val
 
-# images_dir = os.path.expanduser(os.path.join('~','Downloads','RedEdgeImageSet','0000SET'))
+# Method 01
+# imagePath = os.path.join('.','data','0000SET','000')
+# imageName = os.path.join(imagePath,'IMG_0000_4.tif')
 
-#Linux filepath
-#imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
-#Windows filepath
+# Method 02
+# Linux filepath
+# imagePath = os.path.expanduser(os.path.join('~','Downloads','RedEdge3'))
+# Windows filepath
+# imagePath = os.path.join('c:\\','Users','robso','Downloads','RedEdge3')
 imagePath = os.path.join('r:\\','proc_field','RedEdgeImageSet','0000SET')
+print(imagePath)
+
 panelNames = glob.glob(os.path.join(imagePath,'IMG_0002_*.tif'))
+print(panelNames)
 
 # %time imgset = imageset.ImageSet.from_directory(imagePath, progress_callback=update_f)
 imgset = imageset.ImageSet.from_directory(imagePath, progress_callback=update_f)
 
-import pandas as pd
 data, columns = imgset.as_nested_lists()
 print("Columns: {}".format(columns))
 df = pd.DataFrame.from_records(data, index='timestamp', columns=columns)
-
-import math
-import numpy as np
-from mapboxgl.viz import *
-from mapboxgl.utils import df_to_geojson, create_radius_stops, scale_between
-from mapboxgl.utils import create_color_stops
 
 #Insert your mapbox token here
 token = 'pk.eyJ1IjoibWljYXNlbnNlIiwiYSI6ImNqYWx5dWNteTJ3cWYzMnBicmZid3g2YzcifQ.Zrq9t7GYocBtBzYyT3P4sw'
@@ -51,10 +58,6 @@ viz = CircleViz(data, access_token=token, color_property='dls-yaw',
                 style='mapbox://styles/mapbox/satellite-streets-v9')
 viz.show()
 plt.figure(num=1)
-
-import matplotlib.pyplot as plt
-
-# %matplotlib inline
 
 # 'b' as blue |'g' as green | 'r' as red | 'c' as cyan | 'm' as magenta | 'y' as yellow | 'k' as black | 'w' as white
 ax=df.plot(y=columns[3:], subplots=True, figsize=(15,6.75), style=['g','c','y','k','b','g','r','k','m'])
@@ -73,8 +76,6 @@ plt.xlabel('Capture altitude (m)')
 plt.ylabel('Number of occurances')
 plt.show()
 plt.close()
-
-import numpy as np
 
 flight = df.altitude>cutoff_altitude
 ground = ~flight
@@ -105,9 +106,6 @@ plt.xlabel("Wavelength (nm)")
 plt.show()
 plt.close()
 plt.figure(num=4)
-
-import matplotlib.pyplot as plt
-import math
 
 # 'b' as blue |'g' as green | 'r' as red | 'c' as cyan | 'm' as magenta | 'y' as yellow | 'k' as black | 'w' as white
 df[df.altitude>cutoff_altitude].plot(y=columns[8:13], figsize=(14,8), style=['b','g','r','k','m'],)

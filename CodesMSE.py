@@ -1,30 +1,37 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+#1- ReflectanceImagesFolder
+#2- panel corners
+#3- band index
+
+import sys, time, os, datetime, glob
 import micasense.metadata as metadata
-from PIL import Image as Img
-import numpy as np
-import micasense.dls as dls
-import os, glob
 import micasense.capture as capture
-import math
-import matplotlib.pyplot as plt
-from micasense.image import Image
 import micasense.imageset as imageset
 import micasense.utils as msutils
-import micasense.plotutils as plotutils 
-import subprocess
+import micasense.plotutils as plotutils
 import micasense.panel as panel
+import micasense.dls as dls
+from micasense.image import Image
+import cv2
+from PIL import Image as Img
+import numpy as np
+import subprocess
+import math
 from ipywidgets import FloatProgress, Layout
 from IPython.display import display
 import pandas as pd
+import matplotlib.pyplot as plt
 
-import sys, time, os, datetime
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
 os.system("which python")
 print(f"(Python version) :#: {python_version()} :#:")
+
+PlaqueIMG="IMG_0071_"
+OutputFolder="OUT"
 
 #RRDP
 #Linux filepath
@@ -52,7 +59,7 @@ image_names = glob.glob(os.path.join(images_path,'IMG_0309_*.tif'))
 #image_names = glob.glob(os.path.join(images_path, 'IMG_0033_*.tif'))
 
 #RRDP
-panelNames = glob.glob(os.path.join(images_path,'IMG_00**_*.tif'))
+panelNames = glob.glob(os.path.join(images_path,PlaqueIMG+'4.tif'))
 
 #cap = capture.Capture.from_filelist(image_names)
 

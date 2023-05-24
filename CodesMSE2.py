@@ -5,25 +5,25 @@
 #2- panel corners
 #3- band index
 
+import sys, time, os, datetime, glob
 import micasense.metadata as metadata
-from PIL import Image as Img
-import numpy as np
-import micasense.dls as dls
-import os, glob
 import micasense.capture as capture
-import math
-import matplotlib.pyplot as plt
-from micasense.image import Image
 import micasense.imageset as imageset
 import micasense.utils as msutils
-import micasense.plotutils as plotutils 
-import subprocess
+import micasense.plotutils as plotutils
 import micasense.panel as panel
+import micasense.dls as dls
+from micasense.image import Image
+import cv2
+from PIL import Image as Img
+import numpy as np
+import subprocess
+import math
 from ipywidgets import FloatProgress, Layout
 from IPython.display import display
 import pandas as pd
+import matplotlib.pyplot as plt
 
-import sys, time, os, datetime
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
@@ -132,8 +132,6 @@ irr_from_panel = math.pi * panel_radiances / panel_reflectance_by_band
 dls_correction = irr_from_panel / dls_irradiances
 cap.plot_undistorted_reflectance(dls_irradiances * dls_correction,fig_size=(9,8),num=6)
 
-import cv2
-
 nbins = 1024
 vmin = 0
 vmax = 2**16
@@ -194,68 +192,68 @@ dls_correction_redEdge = dls_correction[4]
 
 center_wavelengths=[]
 
-# for channel in channels:
-#     files= glob.glob(os.path.join(images_path,'*'+ channel + '*'))
-#     for file in files:
-#         img = Image(file)
-#         band = band_adi(file)
-#         cap = capture.Capture.from_file(file)
-#         dls_irr = img.horizontal_irradiance
-#         meta = metadata.Metadata(file)
-#         center_wavelengths.append(img.center_wavelength)
+for channel in channels:
+    files= glob.glob(os.path.join(images_path,'*'+ channel + '*'))
+    for file in files:
+        img = Image(file)
+        band = band_adi(file)
+        cap = capture.Capture.from_file(file)
+        dls_irr = img.horizontal_irradiance
+        meta = metadata.Metadata(file)
+        center_wavelengths.append(img.center_wavelength)
 
-#         if file.endswith(".tif"):
-#             figname = file[:-4] + '_reflectance.tif'
-#             print("figname", figname)
+        if file.endswith(".tif"):
+            figname = file[:-4] + '_reflectance.tif'
+            print("figname", figname)
 
-#         path, filename = os.path.split(file)
+        path, filename = os.path.split(file)
          
-#         if band == "Blue":
-#             Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_blue)
-#             #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
-#             print("Band ok1-Blue")
+        if band == "Blue":
+            Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_blue)
+            #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
+            print("Band ok1-Blue")
 
-#         if band == "Green":
-#             Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_green)
-#             #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
-#             print("Band ok2-Green")
+        if band == "Green":
+            Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_green)
+            #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
+            print("Band ok2-Green")
 
-#         if band == "Red":
-#             Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_red)
-#             #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
-#             print("Band ok3-Red")
+        if band == "Red":
+            Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_red)
+            #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
+            print("Band ok3-Red")
 
-#         if band == "NIR":
-#             Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_nir)
-#             #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
-#             print("Band ok4-NIR")
+        if band == "NIR":
+            Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_nir)
+            #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
+            print("Band ok4-NIR")
 
-#         if band == "Red edge":
-#             Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_redEdge)
-#             #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
-#             print("Band ok5-RedEdge")
+        if band == "Red edge":
+            Reflectance = img.undistorted_reflectance(dls_irr* dls_correction_redEdge)
+            #plotutils.plotwithcolorbar(Reflectance, 'Reflektans görüntüsü')
+            print("Band ok5-RedEdge")
 
-#         outfile = os.path.join(ReflectanceImagesFolder,filename)
-#         print(outfile)
-#         im = Img.fromarray(Reflectance)
-#         with open(outfile, 'w') as img: #create CSV
-#             im.save(os.path.join(outfile),format= 'tiff')##123
-#             print("Save image")
+        outfile = os.path.join(ReflectanceImagesFolder,filename)
+        print(outfile)
+        im = Img.fromarray(Reflectance)
+        with open(outfile, 'w') as img: #create CSV
+            im.save(os.path.join(outfile),format= 'tiff')##123
+            print("Save image")
 
-#     if os.environ.get('exiftoolpath') is not None:
-#         exiftool_cmd = os.path.normpath(os.environ.get('exiftoolpath'))
-#     else:
-#         exiftool_cmd = 'exiftool'
+    if os.environ.get('exiftoolpath') is not None:
+        exiftool_cmd = os.path.normpath(os.environ.get('exiftoolpath'))
+    else:
+        exiftool_cmd = 'exiftool'
         
-#     cmd = 'exiftool -tagsFromFile "{}" -ALL -XMP {}'.format(file, figname)
-#     print(cmd)
-# #RRDP
-# #subprocess.check_call(cmd)
-#     # if(subprocess.check_call(cmd) == 0):
-#     #     print("Successfully updated stack metadata")
+    cmd = 'exiftool -tagsFromFile "{}" -ALL -XMP {}'.format(file, figname)
+    print(cmd)
+#RRDP
+#subprocess.check_call(cmd)
+    # if(subprocess.check_call(cmd) == 0):
+    #     print("Successfully updated stack metadata")
 
-#     #     subprocess.run(['exiftool', '-tagsFromFile', file, '-ALL', '-XMP', figname])
-#     #     print("Exiftool 1")
+    #     subprocess.run(['exiftool', '-tagsFromFile', file, '-ALL', '-XMP', figname])
+    #     print("Exiftool 1")
 
-#     #     subprocess.run(['exiftool', '-delete_original!', figname])
-#     #     print("Exiftool OK")
+    #     subprocess.run(['exiftool', '-delete_original!', figname])
+    #     print("Exiftool OK")

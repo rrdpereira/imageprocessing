@@ -1,12 +1,17 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import sys, time, os, datetime, glob
+from micasense.image import Image
+from micasense.panel import Panel
 import cv2 #openCV
 import exiftool
 import os, glob
 import numpy as np
 import pyzbar.pyzbar as pyzbar
-import matplotlib.pyplot as plt
 import mapboxgl
+import matplotlib.pyplot as plt
 
-import sys, time, os, datetime
 from platform import python_version
 
 print(f"(Sys version) :|: {sys.version} :|:")
@@ -33,8 +38,6 @@ except Exception as e:
     print()
     print(e)
 
-from micasense.image import Image
-
 imagePath = os.path.join('.','data','0000SET','000')
 print(imagePath)
 imageName = glob.glob(os.path.join(imagePath,'IMG_0000_1.tif'))[0]
@@ -44,7 +47,6 @@ img = Image(imageName)
 #plt.figure(1)
 img.plot_raw(figsize=(9,6.75),num=1)
 
-from micasense.panel import Panel
 panel = Panel(img)
 if not panel.panel_detected():
     raise IOError("Panel Not Detected! Check your installation of pyzbar")

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import numpy as np
 
 # A = np.diag([1,3,5,7]).reshape(16,)
